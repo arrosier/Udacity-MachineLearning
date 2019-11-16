@@ -42,11 +42,20 @@ def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature
 data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "r") )
 ### there's an outlier--remove it! 
 data_dict.pop("TOTAL", 0)
-# max_key = max(data_dict.keys(), key=(lambda k: 0 if data_dict[k]['salary'] == 'NaN' else data_dict[k]['salary']))
-# min_key = min(data_dict.keys(), key=(lambda k: data_dict[k]['salary']))
+max_key = max(data_dict.keys(), key=(lambda k: 0 if data_dict[k]['salary'] == 'NaN' else data_dict[k]['salary']))
+min_key = min(data_dict.keys(), key=(lambda k: data_dict[k]['salary']))
 
-# print 'Max: ', data_dict[max_key]['salary']
-# print 'Min: ', data_dict[min_key]['salary']
+print 'Max: ', data_dict[max_key]['salary']
+print 'Min: ', data_dict[min_key]['salary']
+
+max_key = max(data_dict.keys(), key=(lambda k: 0 if data_dict[k]['exercised_stock_options'] == 'NaN' else data_dict[k]['exercised_stock_options']))
+min_key = min(data_dict.keys(), key=(lambda k: data_dict[k]['exercised_stock_options']))
+
+max_key = max(data_dict.keys(), key=(lambda k: 0 if data_dict[k]['from_messages'] == 'NaN' else data_dict[k]['from_messages']))
+print 'from_messages max: ', data_dict[max_key]['from_messages']
+
+print 'Max: ', data_dict[max_key]['exercised_stock_options']
+print 'Min: ', data_dict[min_key]['exercised_stock_options']
 
 
 ## the input features we want to use 
@@ -71,7 +80,10 @@ plt.show()
 # cluster here; create predictions of the cluster labels
 # for the data and store them to a list called pred
 from sklearn.cluster import KMeans
-pred = KMeans(n_clusters=2).fit_predict(finance_features)
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+scaled_features = scaler.fit_transform(finance_features)
+pred = KMeans(n_clusters=2).fit_predict(scaled_features)
 
 
 
